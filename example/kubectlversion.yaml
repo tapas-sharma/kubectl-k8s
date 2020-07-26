@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kubeversion
+spec:
+  restartPolicy: Never
+  containers:
+  - name: kubeversion
+    image: "tapassharma/kubectl"
+    args: ['version']

@@ -1,0 +1,23 @@
+{{- define "ts.kubernetesVersion" -}}
+{{$version := .Capabilities.KubeVersion.GitVersion | regexFind "^v\\d+\\.\\d+\\.\\d+"}}{{$version}}
+{{- end -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: kube-system
+  name: labelnode
+  labels:
+    chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+spec:
+    backoffLimit: 0
+    activeDeadlineSeconds: 30
+    template:
+      spec:
+        restartPolicy: Never
+        containers:
+        - name: labelnode-job
+          env:
+              - name: KUBE_VERSION
+                value: {{ template "ts.kubernetesVersion" . }}
+          image: "tapassharma/kubectl"
+          args: ['label','nodes','--all','tapas/sharma=muchWoW']
