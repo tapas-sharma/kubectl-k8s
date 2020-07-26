@@ -5,14 +5,17 @@
 Run kubectl commands as a job or via this container
 
 ## Build Container
+
 `make build`
 
 ## Run Container
 
 ### Get default version
+
 `docker run --name kubectl --rm tapassharma/kubectl version --client`
 
 ### Run specific kubectl version
+
 To get a specfic version of kubectl you can set `KUBE_VERSION` environment variable, this will override the default `kubectl` and download the version specified
 
 `docker run --name kubectl --rm -e KUBE_VERSION=v1.18.5  tapassharma/kubectl version --client`
