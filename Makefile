@@ -38,7 +38,7 @@ push:
 tag-push:
 ifeq ($(GIT_TAG),true)
 	@docker login -u="$(DOCKER_USERNAME)" -p="$(DOCKER_PASSWORD)"
-	@$(MAKE) image push
+	@$(MAKE) build push
 endif
 
 test:
