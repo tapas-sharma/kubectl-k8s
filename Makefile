@@ -1,37 +1,45 @@
 default: build
 
-DOCKER_IMAGE ?= tapassharma/kubectl
+REPO ?= tapassharma/kubectl
+GIT_COMMIT ?= git-$(shell git rev-parse --short HEAD)
+GIT_TAG = false
 GIT_BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD)
 
-ifdef $(DOCKERTAG)
-	GIT_BRANCH = $(DOCKERTAG)
-endif
-
-ifeq ($(GIT_BRANCH), master)
-	DOCKER_TAG = latest
+ifeq ($(TRAVIS),)
+	ifeq ($(GIT_BRANCH), master)
+		TAG = latest
+	else
+		TAG = $(GIT_BRANCH)
+	endif
 else
-	DOCKER_TAG = $(GIT_BRANCH)
+	ifeq ($(TRAVIS_TAG),)
+		TAG = $(GIT_COMMIT)
+		GIT_TAG = true
+	else
+		TAG = $(TRAVIS_TAG)
+		GIT_TAG = true
+	endif
 endif
 
-## If travis branch is set use that
-## as the docker tag
-ifdef $(TRAVIS_BRANCH)
-	DOCKER_TAG = $(TRAVIS_BRANCH)
+ifeq ($(TRAVIS_BRANCH),master)
+	TAG = latest
+	GIT_TAG = true
 endif
 
-## if TRAVIS_TAG is not empty then we are tagging
-## a release
-ifneq ($(TRAVIS_TAG),) 
-	DOCKER_TAG = $(TRAVIS_TAG)
-endif
 
 build:
 	@docker build --build-arg VCS_REF=`git rev-parse --short HEAD` \
 	  --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
-	  -t $(DOCKER_IMAGE):$(DOCKER_TAG) .
+	  -t $(REPO):$(TAG) .
 	  
 push:
-	docker push $(DOCKER_IMAGE):$(DOCKER_TAG)
+	docker push $(REPO):$(TAG)
+
+tag-push:
+ifeq ($(GIT_TAG),true)
+	@docker login -u="$(DOCKER_USERNAME)" -p="$(DOCKER_PASSWORD)"
+	@$(MAKE) image push
+endif
 
 test:
-	docker run $(DOCKER_IMAGE):$(DOCKER_TAG) version --client
+	docker run $(REPO):$(TAG) version --client
