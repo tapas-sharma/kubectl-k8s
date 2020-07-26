@@ -15,3 +15,4 @@ after_success:
       docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD ;
       DOCKERTAG=$TRAVIS_BRANCH make push ;
     fi
+  - make tag-push
