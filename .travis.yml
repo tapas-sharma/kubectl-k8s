@@ -1,0 +1,17 @@
+sudo: 'required'
+
+# have the docker service set up
+services:
+  - 'docker'
+
+script:
+  - 'DOCKERTAG=$TRAVIS_BRANCH make build'
+  - 'DOCKERTAG=$TRAVIS_BRANCH make test'
+
+# only execute the following instructions in
+# the case of a success 
+after_success:
+  - if [[ "$TRAVIS_BRANCH" == "master" ]]; then
+      docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD ;
+      DOCKERTAG=$TRAVIS_BRANCH make push ;
+    fi
