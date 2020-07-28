@@ -1,7 +1,7 @@
 # kubectl-k8s
 
 [![Build Status](https://travis-ci.org/tapas-sharma/kubectl-k8s.svg?branch=master)](https://travis-ci.org/tapas-sharma/kubectl-k8s)
-[![](https://images.microbadger.com/badges/version/tapassharma/kubectl.svg)](https://microbadger.com/images/tapassharma/kubectl "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/commit/tapassharma/kubectl.svg)](https://microbadger.com/images/tapassharma/kubectl "Get your own commit badge on microbadger.com")
+[![](https://images.microbadger.com/badges/version/tapassharma/kubectl.svg)](https://microbadger.com/images/tapassharma/kubectl "master") [![](https://images.microbadger.com/badges/commit/tapassharma/kubectl.svg)](https://microbadger.com/images/tapassharma/kubectl "master")
 
 Run kubectl commands as a job or via this container
 
